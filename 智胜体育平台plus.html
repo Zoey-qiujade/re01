@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>智胜中考体育 · 精致训练平台</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+    :root {
+      --c-bg: #f0f4ff;
+      --c-primary: #4b6cb7;
+      --c-accent: #ff7e5f;
+      --c-glass: rgba(255, 255, 255, 0.55);
+      --c-glass-border: rgba(255, 255, 255, 0.35);
+      --c-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+    }
+
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+      background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+      color: #333;
+      scroll-behavior: smooth;
+    }
+
+    /* ----- 玻璃卡片 ----- */
+    .glass {
+      background: var(--c-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--c-glass-border);
+      box-shadow: var(--c-shadow);
+      border-radius: 1.5rem;
+    }
+
+    /* ----- 霓虹按钮 ----- */
+    .btn-neon {
+      @apply inline-flex items-center justify-center px-5 py-2.5 rounded-xl font-medium transition-all duration-300;
+      background: linear-gradient(135deg, var(--c-primary) 0%, #182848 100%);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(75, 108, 183, 0.35);
+    }
+
+    .btn-neon:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(75, 108, 183, 0.5);
+    }
+
+    /* ----- 进度条 ----- */
+    .progress-neon {
+      height: 0.6rem;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .progress-neon::after {
+      content: '';
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, #ff7e5f, #feb47b);
+      border-radius: 9999px;
+      transition: width 1s ease-out;
+    }
+
+    /* ----- 表格 ----- */
+    table.glass-table {
+      width: 100%;
+      border-spacing: 0 0.5rem;
+      border-collapse: separate;
+    }
+
+    table.glass-table th {
+      @apply text-xs uppercase tracking-wider text-gray-500 pb-3;
+    }
+
+    table.glass-table td {
+      @apply text-sm bg-white/60 px-4 py-3;
+    }
+
+    table.glass-table tr td:first-child {
+      border-top-left-radius: 1rem;
+      border-bottom-left-radius: 1rem;
+    }
+
+    table.glass-table tr td:last-child {
+      border-top-right-radius: 1rem;
+      border-bottom-right-radius: 1rem;
+    }
+
+    /* ----- 加载动画 ----- */
+    .fade-up {
+      animation: fade-up 0.8s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes fade-up {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ----- 导航高亮 ----- */
+    nav a {
+      position: relative;
+      overflow: hidden;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #ff7e5f;
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after,
+    nav a.active::after {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 to-indigo-50">
+
+  <!-- 导航 -->
+  <nav class="sticky top-0 z-50 glass">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center space-x-3">
+          <i class="fas fa-running text-2xl text-indigo-600"></i>
+          <span class="text-xl font-bold tracking-wide">智胜中考体育</span>
+        </div>
+        <div class="hidden md:flex items-center space-x-6 text-sm font-medium">
+          <a href="#home" class="nav-link active">首页</a>
+          <a href="#assessment">体质评估</a>
+          <a href="#training">训练方案</a>
+          <a href="#standards">考核标准</a>
+          <a href="#scoreFeedback">成绩反馈</a>
+          <a href="#teacherMatch">匹配老师</a>
+          <a href="#vip">会员专享</a>
+          <a href="#social">社区</a>
+        </div>
+        <button id="loginBtn" class="btn-neon">
+          <i class="fas fa-user-circle mr-2"></i>登录
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 1. 首页 -->
+  <section id="home" class="max-w-7xl mx-auto px-4 py-20 fade-up">
+    <div class="text-center mb-16">
+      <h1 class="text-5xl font-extrabold mb-4 bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent">
+        智胜中考体育训练平台
+      </h1>
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        科学训练 · 高效提分 · 满分利器
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <!-- 运动数据 -->
+      <div class="glass p-8">
+        <h2 class="text-xl font-bold mb-6 flex items-center">
+          <i class="fas fa-heartbeat text-pink-500 mr-3"></i>运动数据
+        </h2>
+        <div class="space-y-5">
+          <div>
+            <div class="flex justify-between text-sm text-gray-600 mb-1"><span>心率</span><span>75 次/分</span></div>
+            <div class="progress-neon"><div style="width: 38%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm text-gray-600 mb-1"><span>运动时长</span><span>30 分钟</span></div>
+            <div class="progress-neon"><div style="width: 50%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm text-gray-600 mb-1"><span>消耗热量</span><span>250 千卡</span></div>
+            <div class="progress-neon"><div style="width: 42%"></div></div>
+          </div>
+        </div>
+        <button class="btn-neon w-full mt-6">
+          <i class="fas fa-sync-alt mr-2"></i>刷新数据
+        </button>
+      </div>
+
+      <!-- 资讯 -->
+      <div class="glass p-8">
+        <h2 class="text-xl font-bold mb-6 flex items-center">
+          <i class="fas fa-newspaper text-indigo-500 mr-3"></i>中考体育资讯
+        </h2>
+        <ul class="space-y-4">
+          <li class="flex items-start space-x-3"><i class="fas fa-circle text-xs text-indigo-400 mt-1.5"></i>
+            <div>
+              <h4 class="font-semibold">2025 中考评分标准更新</h4>
+              <p class="text-sm text-gray-600">跑步、跳远等项目细则调整</p>
+            </div>
+          </li>
+          <li class="flex items-start space-x-3"><i class="fas fa-circle text-xs text-indigo-400 mt-1.5"></i>
+            <div>
+              <h4 class="font-semibold">科学训练 · 高效提分</h4>
+              <p class="text-sm text-gray-600">专家分享训练技巧</p>
+            </div>
+          </li>
+          <li class="flex items-start space-x-3"><i class="fas fa-circle text-xs text-indigo-400 mt-1.5"></i>
+            <div>
+              <h4 class="font-semibold">常见问题答疑</h4>
+              <p class="text-sm text-gray-600">专业教练在线解答</p>
+            </div>
+          </li>
+        </ul>
+        <a href="#" class="text-sm text-indigo-600 hover:underline mt-4 inline-block">查看更多 →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 体质评估 -->
+  <section id="assessment" class="max-w-7xl mx-auto px-4 py-20 fade-up">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-extrabold mb-2">AI 体质评估</h2>
+      <p class="text-gray-600">输入数据，生成专属报告</p>
+    </div>
+    <div class="glass p-8 max-w-4xl mx-auto">
+      <form id="assessmentForm" class="grid md:grid-cols-2 gap-6">
+        <input type="text" placeholder="姓名" class="px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+        <input type="number" placeholder="年龄" class="px-4 py-3 rounded-xl border border-gray-200" />
+        <input type="number" placeholder="身高 (cm)" class="px-4 py-3 rounded-xl border border-gray-200" />
+        <input type="number" placeholder="体重 (kg)" class="px-4 py-3 rounded-xl border border-gray-200" />
+        <select class="px-4 py-3 rounded-xl border border-gray-200">
+          <option>请选择性别</option>
+          <option>男</option>
+          <option>女</option>
+        </select>
+        <select class="px-4 py-3 rounded-xl border border-gray-200">
+          <option>请选择运动水平</option>
+          <option>初级</option>
+          <option>中级</option>
+          <option>高级</option>
+        </select>
+        <div class="md:col-span-2">
+          <label class="text-sm text-gray-600 mb-2 block">常做运动项目</label>
+          <div class="flex flex-wrap gap-3">
+            <label class="px-4 py-2 bg-white/60 rounded-lg cursor-pointer"><input type="checkbox" class="mr-2" />跑步</label>
+            <label class="px-4 py-2 bg-white/60 rounded-lg cursor-pointer"><input type="checkbox" class="mr-2" />跳远</label>
+            <label class="px-4 py-2 bg-white/60 rounded-lg cursor-pointer"><input type="checkbox" class="mr-2" />球类</label>
+            <label class="px-4 py-2 bg-white/60 rounded-lg cursor-pointer"><input type="checkbox" class="mr-2" />其他</label>
+          </div>
+        </div>
+        <button type="button" id="assessBtn" class="btn-neon md:col-span-2">
+          <i class="fas fa-clipboard-check mr-2"></i>生成报告
+        </button>
+      </form>
+      <!-- 评估结果 -->
+      <div id="assessmentResult" class="hidden mt-8 glass p-6">
+        <h3 class="text-lg font-bold mb-4">评估结果</h3>
+        <div class="grid md:grid-cols-3 gap-4 text-center">
+          <div>
+            <p class="text-sm text-gray-600">体质得分</p>
+            <p class="text-3xl font-extrabold text-indigo-600">85</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">评级</p>
+            <p class="text-3xl font-extrabold text-green-500">良好</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">建议训练</p>
+            <p class="text-3xl font-extrabold text-pink-500">下肢力量、髋部力量</p>
+          </div>
+        </div>
+        <p class="mt-4 text-sm text-gray-700">建议加强下肢力量与有氧耐力，每周训练 3-4 次，每次 40-50 分钟。</p>
+        <button class="btn-neon w-full mt-4">保存报告</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 训练方案 -->
+  <section id="training" class="max-w-7xl mx-auto px-4 py-20 fade-up">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-extrabold mb-2">个性化训练方案</h2>
+      <p class="text-gray-600">根据评估结果，智能生成</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="glass p-6 text-center">
+        <i class="fas fa-flag-checkered text-3xl text-indigo-500 mb-4"></i>
+        <h3 class="font-bold text-lg mb-2">跑步</h3>
+        <p class="text-sm text-gray-600">提升耐力，冲击满分</p>
+      </div>
+      <div class="glass p-6 text-center">
+        <i class="fas fa-shoe-prints text-3xl text-pink-500 mb-4"></i>
+        <h3 class="font-bold text-lg mb-2">跳远</h3>
+        <p class="text-sm text-gray-600">增强爆发力</p>
+      </div>
+      <div class="glass p-6 text-center">
+        <i class="fas fa-dumbbell text-3xl text-green-500 mb-4"></i>
+        <h3 class="font-bold text-lg mb-2">力量</h3>
+        <p class="text-sm text-gray-600">全面提升身体素质</p>
+      </div>
+    </div>
+    <div class="glass p-8 mt-8">
+      <h3 class="font-bold text-lg mb-4">本周计划</h3>
+      <div class="overflow-auto">
+        <table class="glass-table">
+          <thead>
+            <tr>
+              <th>日期</th>
+              <th>项目</th>
+              <th>内容</th>
+              <th>时长</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>周一</td>
+              <td>跑步</td>
+              <td>间歇跑 400m×6（组间休 2′）</td>
+              <td>40min</td>
+            </tr>
+            <tr>
+              <td>周二</td>
+              <td>力量</td>
+              <td>深蹲 20×3 蛙跳 15×3 平板 30″×3</td>
+              <td>30min</td>
+            </tr>
+            <tr>
+              <td>周三</td>
+              <td>恢复</td>
+              <td>全身拉伸</td>
+              <td>15min</td>
+            </tr>
+            <tr>
+              <td>周四</td>
+              <td>跳远</td>
+              <td>助跑+完整跳 核心训练</td>
+              <td>45min</td>
+            </tr>
+            <tr>
+              <td>周五</td>
+              <td>综合</td>
+              <td>1000m 测+跳远测+弱项强化</td>
+              <td>50min</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 考核标准 -->
+  <section id="standards" class="max-w-7xl mx-auto px-4 py-20 fade-up">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-extrabold mb-2">考核标准</h2>
+      <p class="text-gray-600">男女分项，一目了然</p>
+    </div>
+    <div class="glass p-8">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-bold text-lg">评分表</h3>
+        <select id="genderSelect" class="px-4 py-2 rounded-lg border border-gray-200 text-sm">
+          <option value="male">男生</option>
+          <option value="female">女生</option>
+        </select>
+      </div>
+      <div class="overflow-auto">
+        <table class="glass-table">
+          <thead>
+            <tr>
+              <th>项目</th>
+              <th>满分</th>
+              <th>及格</th>
+              <th>单位</th>
+            </tr>
+          </thead>
+          <tbody id="standardsTable">
+            <!-- 动态加载 -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. 成绩反馈 -->
+  <section id="scoreFeedback" class="max-w-7xl mx-auto px-4 py-20 fade-up">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-extrabold mb-2">成绩反馈</h2>
+      <p class="text-gray-600">输入测试成绩，即时评分与建议</p>
+    </div>
+    <div class="glass p-8 max-w-3xl mx-auto">
+      <form id="scoreForm" class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label class="text-sm text-gray-600 mb-1 block">测试项目</label>
+          <select id="testProject" class="w-full px-4 py-3 rounded-lg border border-gray-200">
+            <option value="running1000">1000 米跑</option>
+            <option value="jump">立定跳远</option>
+            <option value="pullup">引体向上</option>
+            <option value="situp">仰卧起坐</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm text-gray-600 mb-1 block">测试成绩</label>
+          <input type="text" id="testScore" placeholder="如：4'15" / 2.1m" class="w-full px-4 py-3 rounded-lg border border-gray-200" />
+        </div>
+        <button type="button" id="evaluateScoreBtn" class="btn-neon md:col-span-2">
+          <i class="fas fa-chart-line mr-2"></i>立即评估
+        </button>
+      </form>
+      <div id="scoreFeedbackResult" class="hidden mt-6 glass p-6">
+        <p id="scoreResultText" class="font-bold text-lg mb-2"></p>
+        <p id="trainingAdvice" class="text-sm text-gray-700"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 匹配老师 -->
+  <section id="teacherMatch" class="max-w-7xl mx-auto px-4 py-20 fade-up">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-extrabold mb-2">匹配老师</h2>
+      <p class="text-gray-600">选择弱项与地区，推荐最佳教练</p>
+    </div>
+    <div class="glass p-8 max-w-4xl mx-auto">
+      <form id="matchForm" class="grid md:grid-cols-3 gap-6">
+        <div>
+          <label class="text-sm text-gray-600 mb-1 block">弱项</label>
+          <select id="weakItem" class="w-full px-4 py-3 rounded-lg border border-gray-200">
+            <option value="running">耐力跑</option>
+            <option value="jump">跳远</option>
+            <option value="strength">力量</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm text-gray-600 mb-1 block">所在地区</label>
+          <input type="text" id="userArea" placeholder="如：北京朝阳区" class="w-full px-4 py-3 rounded-lg border border-gray-200" />
+        </div>
+        <button type="button" id="matchTeacherBtn" class="btn-neon">
+          <i class="fas fa-search mr-2"></i>匹配
+        </button>
+      </form>
+      <div id="teacherList" class="mt-8 grid md:grid-cols-2 gap-6 hidden">
+        <!-- 动态加载 -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. 会员专享 -->
+  <section id="vip" class="max-w-7xl mx-auto px-4 py-20 fade-up">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-extrabold mb-2">会员专享</h2>
+      <p class="text-gray-600">解锁高阶功能，高效提分</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="glass p-6 text-center relative">
+        <h3 class="font-bold text-xl mb-2">月度会员</h3>
+        <p class="text-4xl font-extrabold text-indigo-600 my-2">¥29<span class="text-base text-gray-500">/月</span></p>
+        <ul class="text-sm space-y-2 mt-4 text-left">
+          <li><i class="fas fa-check text-green-500 mr-2"></i>专属课程</li>
+          <li><i class="fas fa-check text-green-500 mr-2"></i>无广告</li>
+          <li><i class="fas fa-check text-green-500 mr-2"></i>基础数据</li>
+        </ul>
+        <button class="btn-neon w-full mt-6">选择</button>
+      </div>
+      <div class="glass p-6 text-center relative scale-105 border-2 border-indigo-400">
+        <span class="absolute top-0 -mt-3 bg-indigo-500 text-white text-xs px-3 py-1 rounded-full">最受欢迎</span>
+        <h3 class="font-bold text-xl mb-2">季度会员</h3>
+        <p class="text-4xl font-extrabold text-indigo-600 my-2">¥79<span class="text-base text-gray-500">/季</span></p>
+        <ul class="text-sm space-y-2 mt-4 text-left">
+          <li><i class="fas fa-check text-green-500 mr-2"></i>进阶数据</li>
+          <li><i class="fas fa-check text-green-500 mr-2"></i>每月2次指导</li>
+          <li><i class="fas fa-check text-green-500 mr-2"></i>无广告</li>
+        </ul>
+        <button class="btn-neon w-full mt-6">选择</button>
+      </div>
+      <div class="glass p-6 text-center relative">
+        <h3 class="font-bold text-xl mb-2">年度会员</h3>
+        <p class="text-4xl font-extrabold text-indigo-600 my-2">¥259<span class="text-base text-gray-500">/年</span></p>
+        <ul class="text-sm space-y-2 mt-4 text-left">
+          <li><i class="fas fa-check text-green-500 mr-2"></i>无限指导</li>
+          <li><i class="fas fa-check text-green-500 mr-2"></i>高级数据</li>
+          <li><i class="fas fa-check text-green-500 mr-2"></i>专属资料</li>
+        </ul>
+        <button class="btn-neon w-full mt-6">选择</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. 社区 -->
+  <section id="social" class="max-w-7xl mx-auto px-4 py-20 fade-up">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-extrabold mb-2">社区交流</h2>
+      <p class="text-gray-600">经验分享 · 互助进步</p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="glass p-6">
+        <h3 class="font-bold text-lg mb-4 flex items-center"><i class="fas fa-fire text-orange-500 mr-3"></i>热门话题</h3>
+        <ul class="space-y-3 text-sm">
+          <li class="flex items-start space-x-3"><i class="fas fa-comment text-indigo-400 mt-1"></i>
+            <div>
+              <h4 class="font-semibold">1000 米如何破 4′？</h4>
+              <p class="text-gray-500 text-xs">328 人讨论 · 10 分钟前更新</p>
+            </div>
+          </li>
+          <li class="flex items-start space-x-3"><i class="fas fa-comment text-indigo-400 mt-1"></i>
+            <div>
+              <h4 class="font-semibold">跳远落地不稳求技巧</h4>
+              <p class="text-gray-500 text-xs">256 人讨论 · 30 分钟前更新</p>
+            </div>
+          </li>
+        </ul>
+        <button class="btn-neon w-full mt-4">更多话题</button>
+      </div>
+      <div class="glass p-6">
+        <h3 class="font-bold text-lg mb-4 flex items-center"><i class="fas fa-question-circle text-blue-500 mr-3"></i>教练答疑</h3>
+        <div class="space-y-3 text-sm">
+          <div class="bg-white/60 rounded-lg p-3">
+            <p><span class="font-medium">Q：</span>每天练多久合适？</p>
+            <p class="text-gray-700 mt-1"><span class="font-medium text-blue-600">A：</span>30-50 分钟为宜，训练前后充分拉伸。</p>
+          </div>
+          <div class="bg-white/60 rounded-lg p-3">
+            <p><span class="font-medium">Q：</span>力量后酸痛是否继续？</p>
+            <p class="text-gray-700 mt-1"><span class="font-medium text-blue-600">A：</span>轻度酸痛可降低强度，剧痛则休息。</p>
+          </div>
+        </div>
+        <button class="btn-neon w-full mt-4">提问教练</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="bg-slate-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8 text-sm">
+      <div>
+        <h3 class="font-bold text-lg mb-4">智胜中考体育</h3>
+        <p class="text-gray-300">科学训练 · 高效提分 · 满分利器</p>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">快速链接</h4>
+        <ul class="space-y-2 text-gray-300">
+          <li><a href="#home" class="hover:text-white">首页</a></li>
+          <li><a href="#assessment" class="hover:text-white">体质评估</a></li>
+          <li><a href="#training" class="hover:text-white">训练方案</a></li>
+          <li><a href="#vip" class="hover:text-white">会员专享</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">联系我们</h4>
+        <p class="text-gray-300">邮箱：21694558306@qq.com</p>
+        <p class="text-gray-300">电话：18890106766</p>
+        <div class="flex space-x-4 mt-4">
+          <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-weixin text-xl"></i></a>
+          <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-qq text-xl"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-slate-700 mt-8 pt-6 text-center text-xs text-gray-400">
+      © 2025 智胜中考体育训练平台. 保留所有权利.
+    </div>
+  </footer>
+
+  <!-- 登录模态框 -->
+  <div id="loginModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+    <div class="glass max-w-md w-full mx-4 p-8 relative">
+      <button id="closeModal" class="absolute top-4 right-4 text-gray-500 hover:text-black"><i class="fas fa-times text-xl"></i></button>
+      <h2 class="text-2xl font-extrabold mb-4">登录 / 注册</h2>
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label class="text-sm text-gray-600 mb-1 block">身份</label>
+          <div class="grid grid-cols-3 gap-2 text-sm">
+            <label class="cursor-pointer p-2 rounded-lg border border-gray-200 text-center"><input type="radio" name="role" value="student" class="mr-1" checked />学生</label>
+            <label class="cursor-pointer p-2 rounded-lg border border-gray-200 text-center"><input type="radio" name="role" value="parent" class="mr-1" />家长</label>
+            <label class="cursor-pointer p-2 rounded-lg border border-gray-200 text-center"><input type="radio" name="role" value="professional" class="mr-1" />教练</label>
+          </div>
+        </div>
+        <input type="text" placeholder="手机号 / 用户名" class="w-full px-4 py-3 rounded-lg border border-gray-200" required />
+        <input type="password" placeholder="密码" class="w-full px-4 py-3 rounded-lg border border-gray-200" required />
+        <button type="submit" class="btn-neon w-full">登录</button>
+        <p class="text-center text-xs text-gray-600">无账号？<a href="#" class="text-indigo-600 hover:underline">立即注册</a></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script>
+    // 滚动显现
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = 1;
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('section').forEach(sec => {
+      sec.style.opacity = 0;
+      sec.style.transform = 'translateY(20px)';
+      sec.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+      observer.observe(sec);
+    });
+
+    // 导航高亮
+    document.querySelectorAll('nav a').forEach(a => {
+      a.addEventListener('click', () => {
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        a.classList.add('active');
+      });
+    });
+
+    // 登录模态框
+    const loginBtn = document.getElementById('loginBtn');
+    const loginModal = document.getElementById('loginModal');
+    const closeModal = document.getElementById('closeModal');
+    loginBtn.addEventListener('click', () => {
+      loginModal.style.display = 'flex';
+    });
+    closeModal.addEventListener('click', () => {
+      loginModal.style.display = 'none';
+    });
+    loginModal.addEventListener('click', (e) => {
+      if (e.target === loginModal) loginModal.style.display = 'none';
+    });
+
+    // 评估 / 成绩反馈 / 老师匹配 示例逻辑
+    document.getElementById('assessBtn')?.addEventListener('click', () => {
+      document.getElementById('assessmentResult').classList.remove('hidden');
+    });
+    document.getElementById('evaluateScoreBtn')?.addEventListener('click', () => {
+      const res = document.getElementById('scoreFeedbackResult');
+      document.getElementById('scoreResultText').textContent = '良好！';
+      document.getElementById('trainingAdvice').textContent = '建议加强核心力量训练，每周 3 次。';
+      res.classList.remove('hidden');
+    });
+    document.getElementById('matchTeacherBtn')?.addEventListener('click', () => {
+      const list = document.getElementById('teacherList');
+      list.innerHTML = `
+        <div class="md:col-span-2 glass p-4 flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <div>
+              <p class="font-bold">冯其斌</p>
+              <p class="text-sm text-gray-600">副教授  优秀教练员 · 13 年教龄</p>
+            </div>
+    <div class="mt-2 text-sm text-gray-400 space-y-1">
+          <p>科研方向：竞技体育管理、特殊体育教育</p>
+          <p>学术成果：国内学术期刊发表论文 30 余篇</p>
+          <p>课题项目：主持参与各级课题 10 余项</p>
+          <p>专利情况：实用新型专利 3 项</p>
+          <p>获奖情况：获黑龙江省高校人文社会科学优秀成果一等奖</p>
+        </div>
+          </div>
+          <button class="btn-neon">预约</button>
+        </div>
+      `;
+      list.classList.remove('hidden');
+    });
+
+    // 考核标准
+    const standardsData = {
+      male: [
+        { project: '1000米跑', full: '3′30″', pass: '4′35″', unit: '分:秒' },
+        { project: '立定跳远', full: '2.5 m', pass: '2.0 m', unit: '米' },
+        { project: '引体向上', full: '15 次', pass: '6 次', unit: '次' },
+      ],
+      female: [
+        { project: '800米跑', full: '3′20″', pass: '4′20″', unit: '分:秒' },
+        { project: '立定跳远', full: '2.0 m', pass: '1.6 m', unit: '米' },
+        { project: '仰卧起坐', full: '50 次', pass: '25 次', unit: '次/分' },
+      ]
+    };
+    const renderStandards = (g) => {
+      const tbody = document.getElementById('standardsTable');
+      tbody.innerHTML = standardsData[g].map(item => `
+        <tr>
+          <td class="px-4 py-3 text-sm font-medium">${item.project}</td>
+          <td class="px-4 py-3 text-sm text-green-600 font-semibold">${item.full}</td>
+          <td class="px-4 py-3 text-sm text-orange-600">${item.pass}</td>
+          <td class="px-4 py-3 text-sm text-gray-500">${item.unit}</td>
+        </tr>
+      `).join('');
+    };
+    document.getElementById('genderSelect')?.addEventListener('change', (e) => renderStandards(e.target.value));
+    renderStandards('male');
+  </script>
+</body>
+
+</html>
